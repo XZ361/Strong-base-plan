@@ -11,7 +11,7 @@
     <!-- 宿主文件 -->
     <div id="app">
         <!-- 插值文本 -->
-        <h2>
+        <h2 :title='title'>
             {{title}}
         </h2>
     </div>
@@ -21,13 +21,10 @@
             el: '#app',
             data() {
                 return {
-                    title: 'hello Vue.js!'
+                    title: '开课吧，购物车!'
                 }
             },
         })
-        setTimeout(()=>{
-            app.title = 'mua,vue,巴嘎~'
-        },2000)
     </script>
 </body>
 </html>
