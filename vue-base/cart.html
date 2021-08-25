@@ -10,9 +10,20 @@
 <body>
     <!-- 宿主文件 -->
     <div id="app">
+        <!-- 用户输入 -->
+        <p>
+            <input type="text" v-model="course" @keydown.enter='addCourse'>
+            <!-- 新增课程 -->
+            <button @click='addCourse'>添加课程</button>
+        </p>
+        
         <!-- 插值文本 -->
         <h2 :title='title'>
             {{title}}
+            <!-- 列表渲染 -->
+            <div v-for="item in courses" :key="item">
+                {{ item }}
+            </div>
         </h2>
     </div>
     <script>
@@ -21,9 +32,18 @@
             el: '#app',
             data() {
                 return {
-                    title: '开课吧，购物车!'
+                    title: '购物车!',
+                    course:'web课程',
+                    courses:['web全栈','web高级']
                 }
             },
+            methods: {
+                addCourse(){
+                    this.courses.push(this.course);
+                    this.course = '';
+                    console.log(this.courses);
+                }
+            }
         })
     </script>
 </body>
