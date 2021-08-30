@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>购物车</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+        .active{
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
     <!-- 宿主文件 -->
@@ -21,9 +26,21 @@
         <h2 :title='title'>
             {{title}}
             <!-- 列表渲染 -->
-            <div v-for="item in courses" :key="item">
+            <!-- class绑定 -->
+            <!-- <div v-for="item in courses" :key="item" :class="{active: selectCourse === item}"
+            @click = "selectCourse = item">
                 {{ item }}
+            </div> -->
+            <!--v-if&v-else¥ -->
+            <p v-if="courses.length == 0">没有任何课程信息</p>
+            <div class="courseList" v-else>
+                <!-- style绑定 -->
+                <div v-for="item in courses" :key="item" :style="{backgroundColor: selectCourse === item ? '#ddd' : 'transparent'}"
+                @click = "selectCourse = item">
+                    {{ item }}
+                </div>
             </div>
+            
         </h2>
     </div>
     <script>
@@ -33,8 +50,9 @@
             data() {
                 return {
                     title: '购物车!',
+                    selectCourse: '',
                     course:'web课程',
-                    courses:['web全栈','web高级']
+                    courses:[]
                 }
             },
             methods: {
