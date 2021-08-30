@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+        .active{
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- 宿主文件 -->
+    <div id="app">
+    </div>
+    <script>
+        // 创建宿主文件
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    title: '购物车!',
+                    selectCourse: '',
+                    course:'web课程',
+                    courses:[]
+                }
+            },
+            methods: {
+                addCourse(){
+                    this.courses.push(this.course);
+                    this.course = '';
+                    console.log(this.courses);
+                }
+            },
+            // 虚拟dom渲染函数等价于模版+vue(简单理解)，可以执行该文件，可以看到效果和cart一样
+            render(){
+                // vue底层将模版编译成虚拟DOM渲染函数，结合响应式系统，在值发生改变时，再次执行虚拟DOM渲染函数
+                // 得到全新的虚拟DOM，依赖diff算法在新旧虚拟DOM之间做个比对，计算出真正需要做出的DOM操作
+                with (this) {
+                    return _c('div', {
+                        attrs: {
+                            "id": "app"
+                        }
+                    }, [_c('p', [_c('input', {
+                        directives: [{
+                            name: "model",
+                            rawName: "v-model",
+                            value: (course),
+                            expression: "course"
+                        }],
+                        attrs: {
+                            "type": "text"
+                        },
+                        domProps: {
+                            "value": (course)
+                        },
+                        on: {
+                            "keydown": function($event) {
+                                if (!$event.type.indexOf('key') && _k($event.keyCode, "enter", 13, $event.key, "Enter"))
+                                    return null;
+                                return addCourse.apply(null, arguments)
+                            },
+                            "input": function($event) {
+                                if ($event.target.composing)
+                                    return;
+                                course = $event.target.value
+                            }
+                        }
+                    }), _v(" "), _c('button', {
+                        on: {
+                            "click": addCourse
+                        }
+                    }, [_v("添加课程")])]), _v(" "), _c('h2', {
+                        attrs: {
+                            "title": title
+                        }
+                    }, [_v("\n            " + _s(title) + "\n            "), _v(" "), (courses.length == 0) ? _c('p', [_v("没有任何课程信息")]) : _c('div', {
+                        staticClass: "courseList"
+                    }, _l((courses), function(item) {
+                        return _c('div', {
+                            key: item,
+                            style: ({
+                                backgroundColor: selectCourse === item ? '#ddd' : 'transparent'
+                            }),
+                            on: {
+                                "click": function($event) {
+                                    selectCourse = item
+                                }
+                            }
+                        }, [_v("\n                    " + _s(item) + "\n                ")])
+                    }), 0)])])
+                }
+            }
+        })
+        console.log(app.$options.render);
+    </script>
+</body>
+</html>
