@@ -25,6 +25,7 @@
         <!-- 插值文本 -->
         <h2 :title='title'>
             {{title}}
+        </h2>
             <!-- 列表渲染 -->
             <!-- class绑定 -->
             <!-- <div v-for="item in courses" :key="item" :class="{active: selectCourse === item}"
@@ -40,8 +41,16 @@
                     {{ item }}
                 </div>
             </div>
-            
-        </h2>
+            <p>
+                <!-- 商品总数 -->
+                <!-- 表达式 -->
+                <!-- 课程总数：{{courses.length + '门数'}} -->
+                <!-- 计算属性 -->
+                <!-- 课程总数：{{total}} -->
+                <!--监听器 -->
+                课程总数：{{totalCount}}
+            </p>
+        
     </div>
     <script>
         // 创建宿主文件
@@ -52,7 +61,8 @@
                     title: '购物车!',
                     selectCourse: '',
                     course:'web课程',
-                    courses:[]
+                    courses:['web课程','web全栈'],
+                    totalCount: 0
                 }
             },
             methods: {
@@ -61,7 +71,32 @@
                     this.course = '';
                     console.log(this.courses);
                 }
-            }
+            },
+            // 计算属性和监听器处理场景不同
+            // 计算属性：适合一个数据受多个数据影响；监听器：适合一个数据影响多个数据
+            // 计算属性具有缓存属性，没有变化变化不会重复执行
+            // 监听器选项提供了更通用的方法，适合执行异步操作或较大开销操作的情况
+            computed: {
+                // 计算属性具有缓存性，如果值没有变化，页面不会重新渲染
+                total() {
+                    return this.courses.length + '门'; 
+                }
+            },
+            // 默认情况下watcher初始化时不执行
+            // watch: {
+            //     courses(newValue, oldValue) {
+            //         this.totalCount = newValue.length +'门';
+            //     }
+            // },
+            watch: {
+                courses: {
+                    immediate: true,
+                    // deep: true,
+                    handler(newValue, oldValue) {
+                        this.totalCount = newValue.length +'门';
+                    }
+                }
+            },
         })
     </script>
 </body>
