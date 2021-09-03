@@ -15,17 +15,64 @@
 <body>
     <!-- 宿主文件 -->
     <div id="app">
-        <!-- 用户输入 -->
-        <p>
-            <input type="text" v-model="course" @keydown.enter='addCourse'>
-            <!-- 新增课程 -->
-            <button @click='addCourse'>添加课程</button>
-        </p>
-        
+        <!--课程新增组件-->
+        <course-add @add-course="addCourse"></course-add>
         <!-- 插值文本 -->
         <h2 :title='title'>
             {{title}}
         </h2>
+        <!--课程列表-->
+        <course-list :courses = "courses"></course-list>
+        <p>
+            <!-- 商品总数 -->
+            <!-- 表达式 -->
+            <!-- 课程总数：{{courses.length + '门数'}} -->
+            <!-- 计算属性 -->
+            <!-- 课程总数：{{total}} -->
+            <!--监听器 -->
+            课程总数：{{totalCount}}
+        </p>
+        
+    </div>
+    <script>
+        //课程新增组件
+        Vue.component('course-add',{
+            data(){
+                return{
+                    course:''
+                }
+            },
+            template:`
+                <div>
+                    <!-- 用户输入 -->
+                    <p>
+                        <input type="text" v-model="course" @keydown.enter='addCourse'>
+                        <!-- 新增课程 -->
+                        <button @click='addCourse'>添加课程</button>
+                    </p>
+                </div>
+            `,
+            methods: {
+                addCourse() {
+                    this.$emit('add-course',this.course);
+                    this.course = '';
+                }
+            },
+        }) 
+        // 列表组件
+        Vue.component('course-list',{
+            data(){
+                return {
+                    selectCourse: '',
+                }
+            },
+            props:{
+                courses:{
+                    type: Array,
+                    default: []
+                }
+            },
+            template:`
             <!-- 列表渲染 -->
             <!-- class绑定 -->
             <!-- <div v-for="item in courses" :key="item" :class="{active: selectCourse === item}"
@@ -33,6 +80,7 @@
                 {{ item }}
             </div> -->
             <!--v-if&v-else¥ -->
+            <div>
             <p v-if="courses.length == 0">没有任何课程信息</p>
             <div class="courseList" v-else>
                 <!-- style绑定 -->
@@ -41,34 +89,40 @@
                     {{ item }}
                 </div>
             </div>
-            <p>
-                <!-- 商品总数 -->
-                <!-- 表达式 -->
-                <!-- 课程总数：{{courses.length + '门数'}} -->
-                <!-- 计算属性 -->
-                <!-- 课程总数：{{total}} -->
-                <!--监听器 -->
-                课程总数：{{totalCount}}
-            </p>
-        
-    </div>
-    <script>
+            </div>
+            
+            `
+        })
+        function getCourses(){
+            return new Promise(resolve=>{
+                setTimeout(() => {
+                    resolve(['web全栈','web高级'])
+                }, 2000);
+            })
+        }
+
         // 创建宿主文件
         const app = new Vue({
             el: '#app',
             data() {
                 return {
                     title: '购物车!',
-                    selectCourse: '',
-                    course:'web课程',
-                    courses:['web课程','web全栈'],
+                    courses:[],
                     totalCount: 0
                 }
             },
+            // vue实例以创建
+            async created () {
+                //异步获取课程
+                const courses = await getCourses();
+                this.courses = courses;
+            },
+            mounted () {
+                
+            },
             methods: {
-                addCourse(){
-                    this.courses.push(this.course);
-                    this.course = '';
+                addCourse(course){
+                    this.courses.push(course);
                     console.log(this.courses);
                 }
             },
