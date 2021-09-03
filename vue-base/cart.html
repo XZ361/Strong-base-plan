@@ -21,7 +21,6 @@
         <h2 :title='title'>
             {{title}}
         </h2>
-<<<<<<< HEAD
         <!--课程列表-->
         <course-list :courses = "courses"></course-list>
         <p>
@@ -74,8 +73,6 @@
                 }
             },
             template:`
-=======
->>>>>>> 15e2b47ae6070d893687b488fd912263b0df2d18
             <!-- 列表渲染 -->
             <!-- class绑定 -->
             <!-- <div v-for="item in courses" :key="item" :class="{active: selectCourse === item}"
@@ -92,7 +89,6 @@
                     {{ item }}
                 </div>
             </div>
-<<<<<<< HEAD
             </div>
             
             `
@@ -105,33 +101,13 @@
             })
         }
 
-=======
-            <p>
-                <!-- 商品总数 -->
-                <!-- 表达式 -->
-                <!-- 课程总数：{{courses.length + '门数'}} -->
-                <!-- 计算属性 -->
-                <!-- 课程总数：{{total}} -->
-                <!--监听器 -->
-                课程总数：{{totalCount}}
-            </p>
-        
-    </div>
-    <script>
->>>>>>> 15e2b47ae6070d893687b488fd912263b0df2d18
         // 创建宿主文件
         const app = new Vue({
             el: '#app',
             data() {
                 return {
                     title: '购物车!',
-<<<<<<< HEAD
                     courses:[],
-=======
-                    selectCourse: '',
-                    course:'web课程',
-                    courses:['web课程','web全栈'],
->>>>>>> 15e2b47ae6070d893687b488fd912263b0df2d18
                     totalCount: 0
                 }
             },
