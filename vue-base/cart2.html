@@ -10,11 +10,30 @@
         .active{
             background-color: #ddd;
         }
+        .message-box{
+            padding: 10px 20px;
+            background-color: #4fc08d;
+            border: 1px solid #42b983;
+        }
+        .message-box-close{
+            float: right;
+        }
     </style>
 </head>
 <body>
     <!-- 宿主文件 -->
     <div id="app">
+        <!-- 弹窗组件 -->
+        <message :show.sync='isShow'>
+            <!-- 具名插槽 -->
+            <template v-slot:title="slotProps">
+                <h1>{{slotProps.title}}</h1>
+            </template>
+            <!-- 默认插槽 -->
+            <template>
+                课程新增成功！
+            </template>
+        </message>
         <!--课程新增组件-->
         <!-- <course-add @add-course="addCourse"></course-add> -->
         <!-- 自定义组件实现v-model -->
@@ -37,6 +56,19 @@
         
     </div>
     <script>
+        // 弹窗组件，通过slot实现内容分发
+        Vue.component('message',{
+            props:['show'],
+            template:`
+                <div class="message-box" v-if='show'>
+                    <strong>
+                        <slot name="title" title="来自message子组件"></slot>
+                    </strong>
+                    <slot></slot>
+                    <span class="message-box-close" @click="$emit('update:show',false)">X</span>
+                </div>
+            `
+        })
         //课程新增子组件
         Vue.component('course-add',{
             props:['value'],
@@ -109,7 +141,8 @@
                     title: '购物车!',
                     courses:[],
                     totalCount: 0,
-                    course:''
+                    course:'',
+                    isShow:false
                 }
             },
             // vue实例以创建
@@ -125,6 +158,7 @@
                 addCourse(){
                     this.courses.push(this.course);
                     this.course = '';
+                    this.isShow = true;
                     console.log(this.courses);
                 }
             },
