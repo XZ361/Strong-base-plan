@@ -6,10 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>购物车</title>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js">
-    </script>
- 
     <style>
         .active {
             background-color: #ddd;
@@ -33,11 +31,18 @@
             float: right;
             cursor: pointer;
         }
+        /* 动画相关样式 */
+        /* 入场之前状态 */
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
         /* 过渡状态 */
-        /* .fade-enter-active,
+        .fade-enter-active,
         .fade-leave-active {
             transition: opacity 1.5s;
-        } */
+        }
     </style>
 </head>
 
@@ -108,10 +113,8 @@
                 }
             },
             template: `
-                <transition name="fade" @before-enter="beforeEnter"
-                @enter="enter"
-                @before-leave="beforeLeave"
-                @leave="leave">
+                <transition enter-active-class="animated bounceIn"
+                leave-active-class="animated bounceOut">
                     <div class="message-box" v-if='show'>
                         <strong>
                             <slot name="title" title="来自message子组件"></slot>
@@ -130,20 +133,6 @@
             methods: {
                 toggle() {
                     this.show = !this.show;
-                },
-                beforeEnter(el){
-                    // 动画初始状态
-                    el.style.opacity = 0;
-                },
-                enter(el,done){
-                    Velocity(el,{opacity:1},{duration:1500,complete:done});
-                },
-                beforeLeave(el){
-                    // 动画初始状态
-                    el.style.opacity = 1;
-                },
-                leave(el,done){
-                    Velocity(el,{opacity:0},{duration:1500,complete:done});
                 }
             },
         })
@@ -194,14 +183,16 @@
             </div> -->
             <!--v-if&v-else¥ -->
             <div>
-                <p v-if="courses.length == 0">没有任何课程信息</p>
-                <div class="courseList" v-else>
-                    <!-- style绑定 -->
+            <p v-if="courses.length == 0">没有任何课程信息</p>
+            <div class="courseList" v-else>
+                <!-- style绑定 -->
+                <transition-group name="fade">
                     <div v-for="item in courses" :key="item.name" :style="{backgroundColor: selectCourse === item ? '#ddd' : 'transparent'}"
                     @click = "selectCourse = item">
                         {{ item.name }} -- ¥{{item.price}}
-                    </div>
-                </div>
+                    </div>    
+                </transition-group>
+            </div>
             </div>
             
             `
