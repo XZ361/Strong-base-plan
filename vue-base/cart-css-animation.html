@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>购物车</title>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <style>
-        .active{
+        .active {
             background-color: #ddd;
         }
-        .message-box{
+
+        .message-box {
             padding: 10px 20px;
         }
-        .success{
+
+        .success {
             background-color: #4fc08d;
             border: 1px solid #42b983;
         }
-        .warning{
+
+        .warning {
             background-color: #f66;
             border: 1px solid rgb(255, 41, 34);
         }
-        .message-box-close{
+
+        .message-box-close {
             float: right;
+            cursor: pointer;
         }
     </style>
 </head>
+
 <body>
     <!-- 宿主文件 -->
     <div id="app">
@@ -67,9 +75,9 @@
             <input type="text" v-model.number="price">
             <button @click="batchUpdate">批量更新商品价格</button>
         </p>
-        
+
         <!--课程列表-->
-        <course-list :courses = "courses"></course-list>
+        <course-list :courses="courses"></course-list>
         <p>
             <!-- 商品总数 -->
             <!-- 表达式 -->
@@ -79,31 +87,34 @@
             <!--监听器 -->
             课程总数：{{totalCount}}
         </p>
-        
+
     </div>
     <script>
         // 注册事件总线
         Vue.prototype.$bus = new Vue();
         // 弹窗组件，通过slot实现内容分发
-        Vue.component('message',{
+        Vue.component('message', {
             // props:['show'],
             data() {
                 return {
-                    show:false
+                    show: false
                 }
             },
-            template:`
-                <div class="message-box" v-if='show'>
-                    <strong>
-                        <slot name="title" title="来自message子组件"></slot>
-                    </strong>
-                    <slot></slot>
-                    <span class="message-box-close" 
-                    @click="toggle()">X</span>
-                </div>
+            template: `
+                <transition enter-active-class="animated bounceIn"
+                leave-active-class="animated bounceOut">
+                    <div class="message-box" v-if='show'>
+                        <strong>
+                            <slot name="title" title="来自message子组件"></slot>
+                        </strong>
+                        <slot></slot>
+                        <span class="message-box-close" 
+                        @click="toggle()">X</span>
+                    </div>
+                </transition>
             `,
-            mounted(){
-                this.$bus.$on('message-close',()=>{
+            mounted() {
+                this.$bus.$on('message-close', () => {
                     this.toggle();
                 })
             },
@@ -114,9 +125,9 @@
             },
         })
         //课程新增子组件
-        Vue.component('course-add',{
-            props:['value'],
-            template:`
+        Vue.component('course-add', {
+            props: ['value'],
+            template: `
                 <div>
                     <!-- 用户输入 -->
                     <p>
@@ -128,30 +139,30 @@
             `,
             methods: {
                 addCourse() {
-                    this.$emit('add-course',this.course);
+                    this.$emit('add-course', this.course);
                 },
-                onInput(e){
-                    this.$emit('input',e.target.value);
+                onInput(e) {
+                    this.$emit('input', e.target.value);
                 }
             },
-            mounted () {
+            mounted() {
                 this.$refs.inp.focus();
             },
-        }) 
+        })
         // 列表组件
-        Vue.component('course-list',{
-            data(){
+        Vue.component('course-list', {
+            data() {
                 return {
                     selectCourse: '',
                 }
             },
-            props:{
-                courses:{
+            props: {
+                courses: {
                     type: Array,
                     default: []
                 }
             },
-            template:`
+            template: `
             <!-- 列表渲染 -->
             <!-- class绑定 -->
             <!-- <div v-for="item in courses" :key="item" :class="{active: selectCourse === item}"
@@ -172,10 +183,10 @@
             
             `
         })
-        function getCourses(){
-            return new Promise(resolve=>{
+        function getCourses() {
+            return new Promise(resolve => {
                 setTimeout(() => {
-                    resolve([{name:'web全栈'},{name:'web高级'}])
+                    resolve([{ name: 'web全栈' }, { name: 'web高级' }])
                 }, 2000);
             })
         }
@@ -186,16 +197,16 @@
             data() {
                 return {
                     title: '购物车!',
-                    courses:[],
+                    courses: [],
                     totalCount: 0,
-                    course:'',
+                    course: '',
                     // isShow:false,
                     // isShowWarn:false,
-                    price:0
+                    price: 0
                 }
             },
             // vue实例以创建
-            async created () {
+            async created() {
                 //异步获取课程
                 const courses = await getCourses();
                 this.courses = courses;
@@ -203,29 +214,29 @@
                 // 批量更新商品价格
                 this.batchUpdate();
             },
-            mounted () {
-                
+            mounted() {
+
             },
             methods: {
-                addCourse(){
-                    if(this.course){
-                        this.courses.push({name:this.course});
+                addCourse() {
+                    if (this.course) {
+                        this.courses.push({ name: this.course });
                         this.course = '';
                         // 显示提示信息
                         // this.isShow = true;
                         this.$refs.msgSuccess.toggle();
                         console.log(this.courses);
-                    }else{
+                    } else {
                         // 显示警告信息
                         // this.isShowWarn = true;
                         this.$refs.msgWarning.toggle();
                     }
-                    
+
                 },
-                batchUpdate(){
+                batchUpdate() {
                     this.courses.forEach(c => {
                         //c.price = this.price;   //非响应式
-                        Vue.set(c,'price',this.price);//响应式的
+                        Vue.set(c, 'price', this.price);//响应式的
                     });
                 }
             },
@@ -236,7 +247,7 @@
             computed: {
                 // 计算属性具有缓存性，如果值没有变化，页面不会重新渲染
                 total() {
-                    return this.courses.length + '门'; 
+                    return this.courses.length + '门';
                 }
             },
             // 默认情况下watcher初始化时不执行
@@ -250,11 +261,12 @@
                     immediate: true,
                     // deep: true,
                     handler(newValue, oldValue) {
-                        this.totalCount = newValue.length +'门';
+                        this.totalCount = newValue.length + '门';
                     }
                 }
             },
         })
     </script>
 </body>
+
 </html>
