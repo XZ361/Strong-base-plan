@@ -57,7 +57,9 @@
             {{title}}
         </h2>
         <!-- toolbar -->
-        <button @click="$bus.$emit('message-close')">清空提示框</button>
+        <div class="toolbar" v-permission="'admin'">
+            <button @click="$bus.$emit('message-close')">清空提示框</button>
+        </div>
         <!--课程新增组件-->
         <!-- <course-add @add-course="addCourse"></course-add> -->
         <!-- 自定义组件实现v-model -->
@@ -82,8 +84,23 @@
         
     </div>
     <script>
+        const role='user';
         // 注册事件总线
         Vue.prototype.$bus = new Vue();
+        // 自定义指令
+        Vue.directive('focus',{
+            inserted(el,binding){
+                el.focus()
+            }
+        })
+        Vue.directive('permission',{
+            inserted(el,binding){
+                console.log(binding);
+                if(role !== 'admin'){
+                    el.parentElement.removeChild(el);
+                }
+            }
+        })
         // 弹窗组件，通过slot实现内容分发
         Vue.component('message',{
             // props:['show'],
@@ -120,7 +137,10 @@
                 <div>
                     <!-- 用户输入 -->
                     <p>
-                        <input type="text" :value="value" @input="onInput" @keydown.enter='addCourse' ref="inp">
+                        <input type="text" :value="value" 
+                        @input="onInput" 
+                        @keydown.enter='addCourse' 
+                        ref="inp" v-focus>
                         <!-- 新增课程 -->
                         <button @click='addCourse'>添加课程</button>
                     </p>
