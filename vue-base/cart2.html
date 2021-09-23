@@ -138,6 +138,10 @@
                 this.$refs.inp.focus();
             },
         }) 
+        // 全局过滤器
+        // Vue.filter('currency',function(value){
+        //     return value;
+        // })
         // 列表组件
         Vue.component('course-list',{
             data(){
@@ -165,12 +169,17 @@
                 <!-- style绑定 -->
                 <div v-for="item in courses" :key="item.name" :style="{backgroundColor: selectCourse === item ? '#ddd' : 'transparent'}"
                 @click = "selectCourse = item">
-                    {{ item.name }} -- ¥{{item.price}}
+                    {{ item.name }} -- {{item.price | currency('$')}}
                 </div>
             </div>
             </div>
             
-            `
+            `,
+            filters:{
+                currency(value,symbol = '￥'){
+                    return symbol + value;
+                }
+            }
         })
         function getCourses(){
             return new Promise(resolve=>{
