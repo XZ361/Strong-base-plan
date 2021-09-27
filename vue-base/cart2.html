@@ -1,31 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>购物车</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://at.alicdn.com/t/font_2837901_5ig6jcdhv2v.js"></script>
     <style>
-        .active{
+        .active {
             background-color: #ddd;
         }
-        .message-box{
+
+        .message-box {
             padding: 10px 20px;
         }
-        .success{
+
+        .success {
             background-color: #4fc08d;
             border: 1px solid #42b983;
         }
-        .warning{
+
+        .warning {
             background-color: #f66;
             border: 1px solid rgb(255, 41, 34);
         }
-        .message-box-close{
+
+        .message-box-close {
             float: right;
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
         }
     </style>
 </head>
+
 <body>
     <!-- 宿主文件 -->
     <div id="app">
@@ -53,11 +68,14 @@
             </template>
         </message>
         <!-- 用render函数实现heading组件 -->
-        <heading level="2">
+        <heading level="2" :title="title" icon="gouwuche">
             {{title}}
         </heading>
         <!-- 插值文本 -->
         <h2 :title='title'>
+            <svg class="icon">
+                <use xlink:href="#icon-gouwuche">
+            </svg>
             {{title}}
         </h2>
         <!-- toolbar -->
@@ -73,9 +91,9 @@
             <input type="text" v-model.number="price">
             <button @click="batchUpdate">批量更新商品价格</button>
         </p>
-        
+
         <!--课程列表-->
-        <course-list :courses = "courses"></course-list>
+        <course-list :courses="courses"></course-list>
         <p>
             <!-- 商品总数 -->
             <!-- 表达式 -->
@@ -85,57 +103,81 @@
             <!--监听器 -->
             课程总数：{{totalCount}}
         </p>
-        
+
     </div>
     <script>
-        const role='user';
+        const role = 'user';
         // 注册事件总线
         Vue.prototype.$bus = new Vue();
         //heading组件
-        // <heading :title="title">{{title}}</heading>
-        // <h2></h2>
-        Vue.component('heading',{
-            props:{
-                level:{
+        // <heading :title="title" icon="cart">{{title}}</heading>
+        // <h2 title="title"><svg><use x:href="#icon-cart"></svg></h2>
+        Vue.component('heading', {
+            props: {
+                level: {
                     type: String,
                     required: true
-                }
+                },
+                title: {
+                    type: String,
+                    default: ''
+                },
+                icon: String  //icon可能有值也可能没值
             },
-            
             render(h) { //h为createElement函数的社区通用简写
                 // vue底层通过snabbdom算法实现虚拟dom
-                console.log(this.$slots.default);
+                // 子节点数组
+                let children = [this.$slots.default];
+                // icon逻辑判断
+                if (this.icon) {
+                    // <svg class="icon"><use xlink:href="#icon-cart"></svg>
+                    children.unshift(
+                        h(
+                            'svg',
+                            { class: 'icon' },
+                            [
+                                h(
+                                    'use',
+                                    { attrs: { 'xlink:href': '#icon-' + this.icon } }
+                                )
+                            ]
+                        )
+                    )
+                }
+                const VNode = h(
+                    'h' + this.level,    //参数一，tagname
+                    { attrs: { title: this.title } },//参数二，一个和模板中属性对应的Object
+                    children   //参数三，子节点Vnode数组
+                );
+                console.log(VNode);
                 // 返回createElement返回的VNode
-                return h(
-                    'h' + this.level,//参数一，tagname
-                    this.$slots.default //参数三，子节点Vnode数组
-                )
+                return VNode;
             }
-        }) 
+        })
 
         // 自定义指令
-        Vue.directive('focus',{
-            inserted(el,binding){
+        Vue.directive('focus', {
+            inserted(el, binding) {
                 el.focus()
             }
         })
-        Vue.directive('permission',{
-            inserted(el,binding){
+        Vue.directive('permission', {
+            inserted(el, binding) {
                 console.log(binding);
-                if(role !== 'admin'){
+                if (role !== 'admin') {
                     el.parentElement.removeChild(el);
                 }
             }
         })
         // 弹窗组件，通过slot实现内容分发
-        Vue.component('message',{
+        Vue.component('message', {
             // props:['show'],
             data() {
                 return {
-                    show:false
+                    show: false
                 }
             },
-            template:`
+            template: `
                 <div class="message-box" v-if='show'>
                     <strong>
                         <slot name="title" title="来自message子组件"></slot>
@@ -145,8 +187,8 @@
                     @click="toggle()">X</span>
                 </div>
             `,
-            mounted(){
-                this.$bus.$on('message-close',()=>{
+            mounted() {
+                this.$bus.$on('message-close', () => {
                     this.toggle();
                 })
             },
@@ -157,9 +199,9 @@
             },
         })
         //课程新增子组件
-        Vue.component('course-add',{
-            props:['value'],
-            template:`
+        Vue.component('course-add', {
+            props: ['value'],
+            template: `
                 <div>
                     <!-- 用户输入 -->
                     <p>
@@ -174,34 +216,34 @@
             `,
             methods: {
                 addCourse() {
-                    this.$emit('add-course',this.course);
+                    this.$emit('add-course', this.course);
                 },
-                onInput(e){
-                    this.$emit('input',e.target.value);
+                onInput(e) {
+                    this.$emit('input', e.target.value);
                 }
             },
-            mounted () {
+            mounted() {
                 this.$refs.inp.focus();
             },
-        }) 
+        })
         // 全局过滤器
         // Vue.filter('currency',function(value){
         //     return value;
         // })
         // 列表组件
-        Vue.component('course-list',{
-            data(){
+        Vue.component('course-list', {
+            data() {
                 return {
                     selectCourse: '',
                 }
             },
-            props:{
-                courses:{
+            props: {
+                courses: {
                     type: Array,
                     default: []
                 }
             },
-            template:`
+            template: `
             <!-- 列表渲染 -->
             <!-- class绑定 -->
             <!-- <div v-for="item in courses" :key="item" :class="{active: selectCourse === item}"
@@ -221,16 +263,16 @@
             </div>
             
             `,
-            filters:{
-                currency(value,symbol = '￥'){
+            filters: {
+                currency(value, symbol = '￥') {
                     return symbol + value;
                 }
             }
         })
-        function getCourses(){
-            return new Promise(resolve=>{
+        function getCourses() {
+            return new Promise(resolve => {
                 setTimeout(() => {
-                    resolve([{name:'web全栈'},{name:'web高级'}])
+                    resolve([{ name: 'web全栈' }, { name: 'web高级' }])
                 }, 2000);
             })
         }
@@ -241,16 +283,16 @@
             data() {
                 return {
                     title: '购物车!',
-                    courses:[],
+                    courses: [],
                     totalCount: 0,
-                    course:'',
+                    course: '',
                     // isShow:false,
                     // isShowWarn:false,
-                    price:0
+                    price: 0
                 }
             },
             // vue实例以创建
-            async created () {
+            async created() {
                 //异步获取课程
                 const courses = await getCourses();
                 this.courses = courses;
@@ -258,29 +300,29 @@
                 // 批量更新商品价格
                 this.batchUpdate();
             },
-            mounted () {
-                
+            mounted() {
+
             },
             methods: {
-                addCourse(){
-                    if(this.course){
-                        this.courses.push({name:this.course});
+                addCourse() {
+                    if (this.course) {
+                        this.courses.push({ name: this.course });
                         this.course = '';
                         // 显示提示信息
                         // this.isShow = true;
                         this.$refs.msgSuccess.toggle();
                         console.log(this.courses);
-                    }else{
+                    } else {
                         // 显示警告信息
                         // this.isShowWarn = true;
                         this.$refs.msgWarning.toggle();
                     }
-                    
+
                 },
-                batchUpdate(){
+                batchUpdate() {
                     this.courses.forEach(c => {
                         //c.price = this.price;   //非响应式
-                        Vue.set(c,'price',this.price);//响应式的
+                        Vue.set(c, 'price', this.price);//响应式的
                     });
                 }
             },
@@ -291,7 +333,7 @@
             computed: {
                 // 计算属性具有缓存性，如果值没有变化，页面不会重新渲染
                 total() {
-                    return this.courses.length + '门'; 
+                    return this.courses.length + '门';
                 }
             },
             // 默认情况下watcher初始化时不执行
@@ -305,11 +347,12 @@
                     immediate: true,
                     // deep: true,
                     handler(newValue, oldValue) {
-                        this.totalCount = newValue.length +'门';
+                        this.totalCount = newValue.length + '门';
                     }
                 }
             },
         })
     </script>
 </body>
+
 </html>
