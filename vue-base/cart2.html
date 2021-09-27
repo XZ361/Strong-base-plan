@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>购物车</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://at.alicdn.com/t/font_2837901_5ig6jcdhv2v.js"></script>
+    
     <style>
         .active {
             background-color: #ddd;
@@ -105,6 +105,8 @@
         </p>
 
     </div>
+    <script src="https://at.alicdn.com/t/font_2837901_5ig6jcdhv2v.js"></script>
+    <script src="./plugins/heading.js"></script>
     <script>
         const role = 'user';
         // 注册事件总线
@@ -112,48 +114,48 @@
         //heading组件
         // <heading :title="title" icon="cart">{{title}}</heading>
         // <h2 title="title"><svg><use x:href="#icon-cart"></svg></h2>
-        Vue.component('heading', {
-            props: {
-                level: {
-                    type: String,
-                    required: true
-                },
-                title: {
-                    type: String,
-                    default: ''
-                },
-                icon: String  //icon可能有值也可能没值
-            },
-            render(h) { //h为createElement函数的社区通用简写
-                // vue底层通过snabbdom算法实现虚拟dom
-                // 子节点数组
-                let children = [this.$slots.default];
-                // icon逻辑判断
-                if (this.icon) {
-                    // <svg class="icon"><use xlink:href="#icon-cart"></svg>
-                    children.unshift(
-                        h(
-                            'svg',
-                            { class: 'icon' },
-                            [
-                                h(
-                                    'use',
-                                    { attrs: { 'xlink:href': '#icon-' + this.icon } }
-                                )
-                            ]
-                        )
-                    )
-                }
-                const VNode = h(
-                    'h' + this.level,    //参数一，tagname
-                    { attrs: { title: this.title } },//参数二，一个和模板中属性对应的Object
-                    children   //参数三，子节点Vnode数组
-                );
-                console.log(VNode);
-                // 返回createElement返回的VNode
-                return VNode;
-            }
-        })
+        // Vue.component('heading', {
+        //     props: {
+        //         level: {
+        //             type: String,
+        //             required: true
+        //         },
+        //         title: {
+        //             type: String,
+        //             default: ''
+        //         },
+        //         icon: String  //icon可能有值也可能没值
+        //     },
+        //     render(h) { //h为createElement函数的社区通用简写
+        //         // vue底层通过snabbdom算法实现虚拟dom
+        //         // 子节点数组
+        //         let children = [this.$slots.default];
+        //         // icon逻辑判断
+        //         if (this.icon) {
+        //             // <svg class="icon"><use xlink:href="#icon-cart"></svg>
+        //             children.unshift(
+        //                 h(
+        //                     'svg',
+        //                     { class: 'icon' },
+        //                     [
+        //                         h(
+        //                             'use',
+        //                             { attrs: { 'xlink:href': '#icon-' + this.icon } }
+        //                         )
+        //                     ]
+        //                 )
+        //             )
+        //         }
+        //         const VNode = h(
+        //             'h' + this.level,    //参数一，tagname
+        //             { attrs: { title: this.title } },//参数二，一个和模板中属性对应的Object
+        //             children   //参数三，子节点Vnode数组
+        //         );
+        //         console.log(VNode);
+        //         // 返回createElement返回的VNode
+        //         return VNode;
+        //     }
+        // })
 
         // 自定义指令
         Vue.directive('focus', {
