@@ -52,6 +52,10 @@
                 请输入课程名称！
             </template>
         </message>
+        <!-- 用render函数实现heading组件 -->
+        <heading level="2">
+            {{title}}
+        </heading>
         <!-- 插值文本 -->
         <h2 :title='title'>
             {{title}}
@@ -87,6 +91,28 @@
         const role='user';
         // 注册事件总线
         Vue.prototype.$bus = new Vue();
+        //heading组件
+        // <heading :title="title">{{title}}</heading>
+        // <h2></h2>
+        Vue.component('heading',{
+            props:{
+                level:{
+                    type: String,
+                    required: true
+                }
+            },
+            
+            render(h) { //h为createElement函数的社区通用简写
+                // vue底层通过snabbdom算法实现虚拟dom
+                console.log(this.$slots.default);
+                // 返回createElement返回的VNode
+                return h(
+                    'h' + this.level,//参数一，tagname
+                    this.$slots.default //参数三，子节点Vnode数组
+                )
+            }
+        }) 
+
         // 自定义指令
         Vue.directive('focus',{
             inserted(el,binding){
