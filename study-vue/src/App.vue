@@ -4,7 +4,11 @@
     <!-- 相对路径 -->
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
   <!-- 绝对路径  需要将assets文件移到public目录下，因为webpack在打包时不回去处理该目录下的文件 -->
-    <img alt="Vue logo" src="/assets/logo.png" />
+    <!-- <img alt="Vue logo" src="/assets/logo.png" /> -->
+    <!-- 以@开头 ：默认会指向 src-->
+    <!-- <img alt="Vue logo" src="@/assets/logo.png" /> -->
+    <!-- 结合vue.config.js自动配置公共路径 -->
+    <img :src="`${publicPath}assets/logo.png`">
 
     <message ref="msgSuccess" class="success">
       <!-- 具名插槽 -->
@@ -44,6 +48,7 @@ export default {
       courses: [],
       course: "",
       title: "购物车!",
+      publicPath: process.env.BASE_URL
     };
   },
   components: {
