@@ -1,7 +1,11 @@
 <!-- APP是整个程序的入口文件 -->
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
+    <!-- 相对路径 -->
+    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
+  <!-- 绝对路径  需要将assets文件移到public目录下，因为webpack在打包时不回去处理该目录下的文件 -->
+    <img alt="Vue logo" src="/assets/logo.png" />
+
     <message ref="msgSuccess" class="success">
       <!-- 具名插槽 -->
       <template v-slot:title="slotProps">
