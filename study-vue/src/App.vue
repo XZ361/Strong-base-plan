@@ -3,13 +3,13 @@
   <div id="app">
     <!-- 相对路径 -->
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-  <!-- 绝对路径  需要将assets文件移到public目录下，因为webpack在打包时不回去处理该目录下的文件 -->
+    <!-- 绝对路径  需要将assets文件移到public目录下，因为webpack在打包时不回去处理该目录下的文件 -->
     <!-- <img alt="Vue logo" src="/assets/logo.png" /> -->
     <!-- 以@开头 ：默认会指向 src-->
     <!-- <img alt="Vue logo" src="@/assets/logo.png" /> -->
     <!-- 结合vue.config.js自动配置公共路径 -->
-    <img :src="`${publicPath}assets/logo.png`">
-
+    <img :src="`${publicPath}assets/logo.png`" />
+    <a href="">hahha</a>
     <message ref="msgSuccess" class="success">
       <!-- 具名插槽 -->
       <template v-slot:title="slotProps">
@@ -48,7 +48,7 @@ export default {
       courses: [],
       course: "",
       title: "购物车!",
-      publicPath: process.env.BASE_URL
+      publicPath: process.env.BASE_URL,
     };
   },
   components: {
@@ -81,7 +81,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped> 
+a {
+  color: $color;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
