@@ -4,9 +4,10 @@
     <p>
       <input
         type="text"
-        :value="value"
-        @input="onInput"
+        :value="val"
+        @change="onChange"
         @keydown.enter="addCourse"
+        class="inp"
       />
       <!-- 新增课程 -->
       <button @click="addCourse">添加课程</button>
@@ -16,17 +17,24 @@
 
 <script>
 export default {
-  props: ["value"],
+  props: ["val"],
+  model:{
+    value:  "val",
+    event:  "change"
+  },
   methods: {
     addCourse() {
-      this.$emit("add-course", this.course);
+      this.$emit("add-course");
     },
-    onInput(e) {
-      this.$emit("input", e.target.value);
+    onChange(e) {
+      this.$emit("change", e.target.value);
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.inp{
+  margin: 10px;
+}
 </style>

@@ -98,13 +98,13 @@ export default {
   fill: currentColor;
   overflow: hidden;
 }
-/* .success {
+.success {
   background-color: #4fc08d;
-  border: 1px solid #42b983;
+  border: 0px solid #42b983;
 }
 
 .warning {
   background-color: #f66;
-  border: 1px solid rgb(255, 41, 34);
-} */
+  border: 0px solid rgb(255, 41, 34);
+}
 </style>
