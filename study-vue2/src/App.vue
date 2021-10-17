@@ -1,13 +1,23 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <router-view/>
+    <router-view/> -->
+     <img alt="Vue logo" src="./assets/logo.png">
+    <hello-world></hello-world>
   </div>
 </template>
+<script>
+import HelloWorld from '@/components/HelloWorld.vue';
 
+export default {
+  components: {
+    HelloWorld
+  },
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -28,5 +38,15 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+</style>
+
+<style scoped>
+#app{
+  background: #ccc;
+}
+.hello >>> p{
+  color: red;
+  border: 4px solid #42b983;
 }
 </style>
