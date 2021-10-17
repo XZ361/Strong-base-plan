@@ -42,10 +42,21 @@ export default {
 </style>
 
 <style scoped>
-#app{
+/* #app{
   background: #ccc;
 }
 .hello >>> p{
+  color: red;
+  border: 4px solid #42b983;
+} */
+</style>
+
+<style scoped lang="scss">
+// .hello /deep/ p{
+//   color: red;
+//   border: 4px solid #42b983;
+// }
+.hello ::v-deep p{
   color: red;
   border: 4px solid #42b983;
 }
