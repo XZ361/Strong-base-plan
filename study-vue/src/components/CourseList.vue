@@ -8,14 +8,13 @@
   <!--v-if&v-else¥ -->
   <div>
     <p v-if="courses.length == 0">没有任何课程信息</p>
-    <div class="courseList" v-else>
+    <div :class="['courseList',$style.red]" v-else>
       <!-- style绑定 -->
       <div
         v-for="item in courses"
         :key="item.name"
-        :style="{
-          backgroundColor: selectCourse === item ? '#ddd' : 'transparent',
-        }"
+        :class="{[$style.active]: selectCourse === item}"
+        
         @click="selectCourse = item"
       >
         {{ item.name }} -- {{ item.price | currency("$") }}
@@ -39,6 +38,9 @@ export default {
       },
     },
   },
+  created(){
+    console.log(this.$style.red);
+  },
   filters: {
     currency(value, symbol = "￥") {
       return symbol + value;
@@ -47,8 +49,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style module>
 .active {
   background-color: #ddd;
+}
+.red{
+  color: red;
 }
 </style>
