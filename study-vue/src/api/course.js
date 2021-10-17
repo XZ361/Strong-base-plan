@@ -4,6 +4,7 @@ import axios from "axios";
 
 export function getCourses() {
     // axios插件在执行操作后会直接返回promise请求
+    // 先去请求静态资源，找不到再去通过代理转发请求到服务器
     return axios.get('/api/course').then(res=>res.data);
     // return new Promise(resolve => {
     //     setTimeout(() => {
