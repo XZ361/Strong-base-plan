@@ -19,4 +19,14 @@ module.exports = {
         types.forEach(type =>
             addStyleResource(config.module.rule('scss').oneOf(type)))
     },
+    devServer:{
+        before(app){
+            // app是一个node服务实例即express实例
+            app.get('/api/course',(req,res)=>{
+                setTimeout(()=>{
+                    res.json([{ name: 'web全栈',price: '8999' }, { name: 'web高级',price:8999 }])
+                },1000)
+            })
+        }
+    }
 }
