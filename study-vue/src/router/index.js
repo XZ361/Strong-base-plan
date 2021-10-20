@@ -22,6 +22,11 @@ const routes = [
     path: '/course/:name',
     name: 'Detail',
     component: () => import('../views/Detail.vue')
+  },
+  {
+  // 会匹配所有路径
+    path: '*',
+    component: () => import('../views/404.vue')
   }
 ]
 
