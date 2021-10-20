@@ -17,7 +17,9 @@
         
         @click="selectCourse = item"
       >
-        {{ item.name }} -- {{ item.price | currency("$") }}
+        <router-link :to="`/course/${item.name}`">
+          {{ item.name }} -- {{ item.price | currency("$") }}
+        </router-link>
       </div>
     </div>
   </div>
