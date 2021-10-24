@@ -29,6 +29,8 @@
     <course-add v-model="course" @add-course="addCourse"></course-add>
 
     <course-list :courses="courses"></course-list>
+    <!-- 嵌套内容出口 -->
+    <router-view></router-view>
   </div>
 </template>
 <script>
