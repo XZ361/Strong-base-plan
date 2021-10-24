@@ -15,11 +15,13 @@
         :key="item.name"
         :class="{[$style.active]: selectCourse === item}"
         
-        @click="selectCourse = item"
+        @click="onClick(item)"
       >
-        <router-link :to="`/admin/course/${item.name}`">
+      <!-- 用编程式导航实现路由跳转 -->
+      {{ item.name }} -- {{ item.price | currency("$") }}
+        <!-- <router-link :to="`/admin/course/${item.name}`">
           {{ item.name }} -- {{ item.price | currency("$") }}
-        </router-link>
+        </router-link> -->
       </div>
     </div>
   </div>
@@ -47,6 +49,12 @@ export default {
     currency(value, symbol = "￥") {
       return symbol + value;
     },
+  },
+  methods: {
+    onClick(item) {
+      this.selectCourse = item;
+      this.$router.push(`/admin/course/${item.name}`);
+    }
   },
 };
 </script>
