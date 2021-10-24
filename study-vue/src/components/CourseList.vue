@@ -53,7 +53,11 @@ export default {
   methods: {
     onClick(item) {
       this.selectCourse = item;
-      this.$router.push(`/admin/course/${item.name}`);
+      // this.$router.push(`/admin/course/${item.name}`);
+      this.$router.push({
+        name: 'Detail',//可以用到路由名称，即命名路由
+        params: { name: item.name }
+      })
     }
   },
 };
