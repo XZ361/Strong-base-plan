@@ -15,7 +15,7 @@
         //         console.log('获取数据');
         //     }
         // },
-        watch: {//上述程序的简写方式
+        watch: {//上述程序的简写方式，监听路由的变化
             $route: {
                 immediate: true,
                 deep: true,
