@@ -78,5 +78,13 @@ export default {
       }
     },
   },
+  // 组件内路由守卫
+  beforeRouteEnter(to, from, next) {
+    if (window.isLogin) {
+      next();
+    } else {
+      next("/login?redirect=" + to.fullPath);
+    }
+  },
 };
 </script>
