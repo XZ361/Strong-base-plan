@@ -15,6 +15,24 @@
         methods: {
             login() {
                 window.isLogin = true;
+                //添加动态路由
+                this.$router.addRoutes([
+                   {
+                        path: '/admin',
+                        name: 'Admin',
+                        component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
+                        children:[
+                            {
+                                path: '/admin/course/:name',
+                                name: 'Detail',
+                                component: () => import('../views/Detail.vue')
+                            }
+                        ],
+                        meta:{
+                            auth: true
+                        }
+                    }
+                ])
                 this.$router.push(this.$route.query.redirect);
             },
             logout() {

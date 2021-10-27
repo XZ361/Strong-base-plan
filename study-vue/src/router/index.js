@@ -16,33 +16,6 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/admin',
-    name: 'Admin',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.懒加载
-    component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
-    children:[
-      {
-        path: '/admin/course/:name',
-        name: 'Detail',
-        component: () => import('../views/Detail.vue')
-      }
-    ],
-    meta:{
-      auth: true
-    },
-    // beforeEnter(to,from,next){
-    //   // 判断路由是否需要守卫
-    //     // 是否登录
-    //     if (window.isLogin){
-    //       next();
-    //     } else {
-    //       next('/login?redirect=' + to.fullPath);
-    //     }
-    // }
-  },
-  {
     path: '/course/:name',
     name: 'Detail',
     component: () => import('../views/Detail.vue')
@@ -74,5 +47,26 @@ const router = new VueRouter({
 //     next();
 //   }
 // })
+
+router.beforeEach((to,from,next) => {
+  // 判断逻辑：
+  // 是否登录
+  if(window.isLogin){
+    // 已经登录，还去登录页面，就重定向到首页
+    if (to.path === '/login'){
+      next('/');
+    } else {
+      // 已经登陆，去的不是登录页，直接放行
+      next();
+    }
+  } else {
+    // 未登录，去的是登录页，直接放行
+    if (to.path === '/login'){
+      next();
+    } else {
+      next('/login?redirect=' + to.fullPath);
+    }
+  }
+})
 
 export default router
