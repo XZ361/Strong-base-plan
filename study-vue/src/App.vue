@@ -7,7 +7,12 @@
     </nav>
       <!-- 路由出口 -->
       <!-- 路由匹配到的组件将渲染在这里 -->
-    <router-view></router-view>
+      <!-- 利用keepalive做组件缓存，保留admin组件状态，提高执行效率 -->
+      <!-- include依赖的是具体组件 -->
+      <keep-alive include="admin">
+        <router-view></router-view>
+      </keep-alive>
+    
   </div>
 </template>
 

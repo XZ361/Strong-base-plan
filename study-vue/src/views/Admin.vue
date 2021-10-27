@@ -42,7 +42,7 @@ import CourseList from "@/components/CourseList.vue";
 import { getCourses } from "@/api/course.js";
 
 export default {
-  name: "App",
+  name: "admin",
   data() {
     return {
       courses: [],
