@@ -7,14 +7,10 @@
 
 <script>
     export default {
-        data() {
-            return {
-                // isLogin: false
-            }
-        },
         methods: {
             login() {
-                window.isLogin = true;
+                // 不能直接变更状态，必须通过提交mutations的方式变更状态
+                this.$store.commit('login');
                 //添加动态路由
                 this.$router.addRoutes([
                    {
@@ -36,13 +32,13 @@
                 this.$router.push(this.$route.query.redirect);
             },
             logout() {
-                window.isLogin = false;
+                this.$store.commit('logout');
                 this.$router.push('/');
             }
         },
         computed: {
             isLogin() {
-                return window.isLogin; 
+                return this.$store.state.isLogin; 
             }
         },
     }

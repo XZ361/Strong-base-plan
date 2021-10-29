@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -51,7 +52,7 @@ const router = new VueRouter({
 router.beforeEach((to,from,next) => {
   // 判断逻辑：
   // 是否登录
-  if(window.isLogin){
+  if(store.state.isLogin){
     // 已经登录，还去登录页面，就重定向到首页
     if (to.path === '/login'){
       next('/');
