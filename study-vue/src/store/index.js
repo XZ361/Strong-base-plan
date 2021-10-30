@@ -5,6 +5,7 @@ import user from "./user";
 Vue.use(Vuex)
 // 数据仓库
 export default new Vuex.Store({
+  strict:true,
   modules: {
     user
   }
