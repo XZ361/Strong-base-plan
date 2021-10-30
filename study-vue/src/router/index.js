@@ -52,7 +52,7 @@ const router = new VueRouter({
 router.beforeEach((to,from,next) => {
   // 判断逻辑：
   // 是否登录
-  if(store.state.isLogin){
+  if(store.state.user.isLogin){
     // 已经登录，还去登录页面，就重定向到首页
     if (to.path === '/login'){
       next('/');

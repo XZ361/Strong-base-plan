@@ -6,14 +6,14 @@
 </template>
 
 <script>
+import { mapState,mapActions } from "vuex";
 export default {
   methods: {
     login() {
       // 不能直接变更状态，必须通过提交mutations的方式变更状态
       // this.$store.commit('login');
       // 派发动作，来触发Actions
-      this.$store
-        .dispatch("login", "admin")
+      this["user/login"]("admin")
         .then(() => {
           //添加动态路由
           this.$router.addRoutes([
@@ -42,8 +42,7 @@ export default {
     },
     logout() {
       //   this.$store.commit("logout");
-      this.$store
-        .dispatch("logout", "yes")
+      this["user/logout"]("yes")
         .then(() => {
           this.$router.push("/");
         })
@@ -51,11 +50,15 @@ export default {
           alert("口令错误");
         });
     },
+    ...mapActions(['user/login','user/logout'])
   },
   computed: {
-    isLogin() {
-      return this.$store.state.isLogin;
-    },
+    // isLogin() {
+    //   // 通过user命名空间拿到状态数据
+    //   return this.$store.state.user.isLogin;
+    // },
+    // 状态的映射
+    ...mapState('user',['isLogin'])
   },
 };
 </script>
