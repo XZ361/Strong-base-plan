@@ -5,6 +5,11 @@
       <router-link to="/">Home</router-link>
       <router-link to="/admin">Admin</router-link>
     </nav>
+
+    <span v-if="isLogin">
+      {{welcome}}
+      <button>注销</button>
+    </span>
       <!-- 路由出口 -->
       <!-- 路由匹配到的组件将渲染在这里 -->
       <!-- 利用keepalive做组件缓存，保留admin组件状态，提高执行效率 -->
@@ -17,7 +22,13 @@
 </template>
 
 <script>
-
+import { mapState, mapGetters } from "vuex";
+export default{
+  computed: {
+    ...mapState('user',['isLogin']),
+    ...mapGetters('user',['welcome'])
+  },
+}
 </script>
 
 <style lang="scss" scoped> 
