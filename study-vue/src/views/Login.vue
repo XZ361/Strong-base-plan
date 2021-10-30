@@ -13,7 +13,7 @@ export default {
       // 不能直接变更状态，必须通过提交mutations的方式变更状态
       // this.$store.commit('login');
       // 派发动作，来触发Actions
-      this.$store.state.user.isLogin =true;
+      // this.$store.state.user.isLogin =true;
       this["user/login"]("admin")
         .then(() => {
           //添加动态路由
