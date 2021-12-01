@@ -68,8 +68,9 @@ VueRouter.install = function (_Vue) {
             // 1.获取hash window.location.hash
             // 2.获取组件的映射表 this.$router.routes
             let tpl
-            route = options.routes.find(route => route.path === current)
             const { current, options } = this.$router
+
+            const route = options.routes.find(route => route.path === current)
 
             // 3.匹配渲染
             if (route) {
