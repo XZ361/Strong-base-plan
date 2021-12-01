@@ -23,9 +23,18 @@ let Vue
 class VueRouter {
     constructor(options) {
         this.options = options
-        this.current = window.location.hash.slice(1) || '/'
+        // 构造响应式数据，current必须是响应式数据，当他改变时，使用它的组件才能重新渲染
+        // 如何构造一个响应式数据
+        // 1.Vue.util.defineReactive(obj,'current','/')
+        // 2. 借鸡生蛋--new Vue({data:{current:'/'}})
+        Vue.util.defineReactive(
+            // 给当前router实例设置一个属性current，该属性是响应式的，带有初始值
+            this,
+            'current', 
+            window.location.hash.slice(1) || '/'
+        )
         // 监控url的变化
-        window.addEventListener('hashchange',()=>{
+        window.addEventListener('hashchange', () => {
             // hash带#,需要处理下
             this.current = window.location.hash.slice(1)
         })
@@ -42,9 +51,9 @@ VueRouter.install = function (_Vue) {
     // 观察main.js中的根组件，发现根组件上存在router实例，所以可以通过混入Vue实例加生命周期的方式拿到router实例
     // 全局混入Vue实例,通过生命周期钩子拿到router实例
     Vue.mixin({
-        beforeCreate(){//生命周期钩子执行比较靠后，会在new Vue()时执行，所以将router实例创建时期延后执行，符合上述猜想
+        beforeCreate() {//生命周期钩子执行比较靠后，会在new Vue()时执行，所以将router实例创建时期延后执行，符合上述猜想
             // 仅在根组件创建时，执行一次
-            if(this.$options.router){
+            if (this.$options.router) {
                 Vue.prototype.$router = this.$options.router
             }
         }
@@ -58,12 +67,18 @@ VueRouter.install = function (_Vue) {
             // 实现内容更新
             // 1.获取hash window.location.hash
             // 2.获取组件的映射表 this.$router.routes
-            const {current,options} = this.$router
+            let tpl
+            route = options.routes.find(route => route.path === current)
+            const { current, options } = this.$router
 
             // 3.匹配渲染
-            const tpl = options.routes.find(route=>route.path===current)
+            if (route) {
+                tpl = route.component
+            }
             console.log(tpl);
-            return h(tpl.component)
+            // 当前存在一个问题，点击router-link，内容不能动态响应
+            // 问题在于改变url时，render函数没有重新渲染，即current非响应式数据
+            return h(tpl)
         }
     })
     Vue.component('router-link', {
@@ -74,7 +89,7 @@ VueRouter.install = function (_Vue) {
             }
         },
         render(h) {
-            
+
             // <router-link to="/about">about</router-link>
             // <a href="/about">about</a>
             return h('a', { attrs: { href: '#' + this.to } }, this.$slots.default)
