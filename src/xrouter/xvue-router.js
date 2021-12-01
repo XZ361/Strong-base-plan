@@ -23,6 +23,12 @@ let Vue
 class VueRouter {
     constructor(options) {
         this.options = options
+        this.current = window.location.hash.slice(1) || '/'
+        // 监控url的变化
+        window.addEventListener('hashchange',()=>{
+            // hash带#,需要处理下
+            this.current = window.location.hash.slice(1)
+        })
     }
 }
 
@@ -53,7 +59,8 @@ VueRouter.install = function (_Vue) {
             // 1.获取hash window.location.hash
             // 2.获取组件的映射表 this.$router.routes
             // 3.匹配渲染
-            return h(Home)
+            console.log(this.$router);
+            return h(null)
         }
     })
     Vue.component('router-link', {
