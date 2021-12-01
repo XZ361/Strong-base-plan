@@ -41,7 +41,7 @@ VueRouter.install = function (_Vue) {
     // 就是说install执行时，根本就不存在router实例
     // 观察main.js中的根组件，发现根组件上存在router实例，所以可以通过混入Vue实例加生命周期的方式拿到router实例
     // 全局混入Vue实例,通过生命周期钩子拿到router实例
-    Vue.minix({
+    Vue.mixin({
         beforeCreate(){//生命周期钩子执行比较靠后，会在new Vue()时执行，所以将router实例创建时期延后执行，符合上述猜想
             // 仅在根组件创建时，执行一次
             if(this.$options.router){
@@ -58,9 +58,12 @@ VueRouter.install = function (_Vue) {
             // 实现内容更新
             // 1.获取hash window.location.hash
             // 2.获取组件的映射表 this.$router.routes
+            const {current,options} = this.$router
+
             // 3.匹配渲染
-            console.log(this.$router);
-            return h(null)
+            const tpl = options.routes.find(route=>route.path===current)
+            console.log(tpl);
+            return h(tpl.component)
         }
     })
     Vue.component('router-link', {
