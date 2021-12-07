@@ -7,7 +7,8 @@ import './plugins/element.js'
 import router from './xrouter'
 
 // import store from './store'
-import store from './kstore'
+// import store from './kstore'
+import store from './xstore'
 
 Vue.config.productionTip = false
 
