@@ -7,6 +7,7 @@ let Vue
 class Store {
     constructor(options) {
         this._mutations = options.mutations
+        this._actions = options.actions
         // 响应式处理的数据:state;通过借鸡生蛋
         // this.state = new Vue({
         //     data: options.state
@@ -20,25 +21,37 @@ class Store {
                 $$state: options.state
             }
         })
-        
+
+        // 绑定this上下文
+        this.commit = this.commit.bind(this)
+        this.dispatch = this.dispatch.bind(this)
     }
     // 可以通过get的方式获取_vm
-    get state(){
+    get state() {
         return this._vm._data.$$state
     }
     // 将来用户只读，且不能设置state
-    set state(v){
+    set state(v) {
         console.error('请使用replaceState方式去重置状态');
     }
     // 实现commit,修改状态：commit('add',payload)
-    commit(type,payload){
+    commit(type, payload) {
         // 根据type获取mutation
         const mutation = this._mutations[type]
-        if(!mutation){
+        if (!mutation) {
             console.error('不存在mutation')
             return
         }
-        mutation(this.state,payload)
+        mutation(this.state, payload)
+    }
+    // 实现dispatch
+    dispatch(type, payload) {
+        const action = this._actions[type]
+        if (!action) {
+            console.error('不存在action')
+            return
+        }
+        action(this, payload)
     }
 }
 
