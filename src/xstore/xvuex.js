@@ -6,6 +6,7 @@
 let Vue
 class Store {
     constructor(options) {
+        this._mutations = options.mutations
         // 响应式处理的数据:state;通过借鸡生蛋
         // this.state = new Vue({
         //     data: options.state
@@ -28,6 +29,16 @@ class Store {
     // 将来用户只读，且不能设置state
     set state(v){
         console.error('请使用replaceState方式去重置状态');
+    }
+    // 实现commit,修改状态：commit('add',payload)
+    commit(type,payload){
+        // 根据type获取mutation
+        const mutation = this._mutations[type]
+        if(!mutation){
+            console.error('不存在mutation')
+            return
+        }
+        mutation(this.state,payload)
     }
 }
 
