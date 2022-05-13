@@ -1,6 +1,7 @@
 <div id="app"></div>
 
 <script>
+  // low版vue响应式
   // 给一个obj定义一个响应式的属性
   function defineReactive(obj, key, val) {
     Object.defineProperty(obj, key, {
@@ -23,6 +24,7 @@
   defineReactive(obj, 'foo', 'foo')
 
   function update() {
+    // 获取最新值，赋值给页面
     app.innerText = obj.foo
   }
 

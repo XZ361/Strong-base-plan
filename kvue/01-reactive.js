@@ -9,7 +9,9 @@ function defineReactive(obj, key, val) {
   // 利用get/set来对obj进行拦截
   Object.defineProperty(obj, key, {
     get() {
+      // 日志记录
       console.log("get", key);
+      // 返回当前对象对应属性的值
       return val;
     },
     set(newVal) {
@@ -36,6 +38,12 @@ function observe(obj) {
 function set(obj, key, val) {
   defineReactive(obj, key, val)
 }
+
+//----------------------------test-------------------------
+const obj2 = {}
+// 测试下响应式拦截函数
+defineReactive(obj2,'foo','foo')
+obj2.foo
 
 const obj = {
   foo: 'foo',
