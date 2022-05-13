@@ -1,9 +1,12 @@
+// js中监听数据变更需要Object.defineProperty()函数
 // 给一个obj定义一个响应式的属性
+// 先定义一个defineReactive函数
 function defineReactive(obj, key, val) {
   // 递归
   // val如果是个对象，就需要递归处理
   observe(val)
   
+  // 利用get/set来对obj进行拦截
   Object.defineProperty(obj, key, {
     get() {
       console.log("get", key);

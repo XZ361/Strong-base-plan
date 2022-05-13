@@ -16,11 +16,16 @@ export default new Vuex.Store({
   },
   actions: {
     // 上下文从何而来，长什么样
-    add({commit}) {
+    add({ commit }) {
       setTimeout(() => {
         commit('add')
       }, 1000);
     }
   },
-  
+  getters: {
+    doubleCounter: state => {
+      return state.couter * 2
+    }
+  }
+
 })
