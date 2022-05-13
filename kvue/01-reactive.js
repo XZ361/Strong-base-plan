@@ -26,8 +26,11 @@ function defineReactive(obj, key, val) {
   });
 }
 
+// 实际开发中一个对象可能有多个属性，这时候不能一次次去执行defineReactive()
+// 需要自动化处理这种情况，遍历obj的所有属性，给每个key都实现响应式
 // 遍历响应式处理
 function observe(obj) {
+  // typeof 判断如果返回非对象或者是null,那么可以判断obj是基本数据类型
   if (typeof obj !== "object" || obj == null) {
     return obj;
   }
