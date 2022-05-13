@@ -3,7 +3,7 @@
 // 先定义一个defineReactive函数
 function defineReactive(obj, key, val) {
   // 递归
-  // val如果是个对象，就需要递归处理
+  //2 val如果是个对象，就需要递归处理
   observe(val)
   
   // 利用get/set来对obj进行拦截
@@ -18,7 +18,7 @@ function defineReactive(obj, key, val) {
       if (newVal !== val) {
         console.log("set", key);
         val = newVal;
-        // 新值如果是对象，仍然需要递归遍历处理
+        // 3新值如果是对象，仍然需要递归遍历处理
         observe(newVal)
         // update()
       }
@@ -35,22 +35,23 @@ function observe(obj) {
   if (typeof obj !== "object" || obj == null) {
     return obj;
   }
-//  要处理的一定是对象object
+//  2要处理的一定是对象object
   Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key]));
 }
 
+// 4
 function set(obj, key, val) {
   defineReactive(obj, key, val)
 }
 
 //----------------------------test-------------------------
-// 简单数据
+//1 简单数据
 const obj2 = {}
 // 测试下响应式拦截函数
 defineReactive(obj2,'foo','foo')
 // obj2.foo
 
-// 复杂数据类型
+//2 复杂数据类型
 const obj = {
   foo: 'foo',
   bar: 'bar',
@@ -61,13 +62,13 @@ const obj = {
 // defineReactive(obj, "foo", "foo");
 observe(obj)
 // obj.foo;
-// 新值是对象的类型，需要进行响应式处理
+// 3新值是对象的类型，需要进行响应式处理
 obj.baz = {
   n: 10
 }
 // 可以正常拦截复杂数据
 obj.baz.n
-// 复杂数据类型添加新的属性
+// 4复杂数据类型添加新的属性
 // obj.dong = 'dong'
 
 // 由于新的属性没有进行响应式处理，所以需要一个set方法
