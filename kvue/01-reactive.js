@@ -31,10 +31,11 @@ function defineReactive(obj, key, val) {
 // 遍历响应式处理
 function observe(obj) {
   // typeof 判断如果返回非对象或者是null,那么可以判断obj是基本数据类型
+  // 不做处理
   if (typeof obj !== "object" || obj == null) {
     return obj;
   }
-
+//  要处理的一定是对象object
   Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key]));
 }
 
@@ -43,11 +44,13 @@ function set(obj, key, val) {
 }
 
 //----------------------------test-------------------------
+// 简单数据
 const obj2 = {}
 // 测试下响应式拦截函数
 defineReactive(obj2,'foo','foo')
-obj2.foo
+// obj2.foo
 
+// 复杂数据类型
 const obj = {
   foo: 'foo',
   bar: 'bar',
@@ -58,10 +61,15 @@ const obj = {
 // defineReactive(obj, "foo", "foo");
 observe(obj)
 // obj.foo;
-// obj.baz = {
-//   n: 10
-// }
-// obj.baz.n
+// 新值是对象的类型，需要进行响应式处理
+obj.baz = {
+  n: 10
+}
+// 可以正常拦截复杂数据
+obj.baz.n
+// 复杂数据类型添加新的属性
 // obj.dong = 'dong'
+
+// 由于新的属性没有进行响应式处理，所以需要一个set方法
 set(obj, 'dong', 'dong')
 obj.dong
