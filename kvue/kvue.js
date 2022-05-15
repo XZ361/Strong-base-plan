@@ -89,22 +89,25 @@ class Compile {
     this.$vm = vm;
     this.$el = document.querySelector(el);
 
-    // 当前宿主存在，则执行编译
+    // 0当前宿主存在，则执行编译
     if (this.$el) {
+      // 1执行编译
       this.compile(this.$el);
     }
   }
 
   // 遍历node，判断节点类型，做不同处理
   compile(node) {
+    // 获取当前宿主的所有子节点
     const childNodes = node.childNodes;
 
     Array.from(childNodes).forEach((n) => {
-      // 判断类型
+      // 判断类型,如果当前是一个元素，则遍历其属性
       if (this.isElement(n)) {
         // console.log('编译元素', n.nodeName);
         this.compileElement(n);
-        // 递归
+
+        // 如果元素节点还有子节点，则递归遍历
         if (n.childNodes.length > 0) {
           this.compile(n);
         }
@@ -120,7 +123,7 @@ class Compile {
     return n.nodeType === 1;
   }
 
-  // 形如{{ooxx}}
+  // 判断节点是形如{{ooxx}}插值表达式
   isInter(n) {
     return n.nodeType === 3 && /\{\{(.*)\}\}/.test(n.textContent);
   }
@@ -135,15 +138,17 @@ class Compile {
   // 编译元素：遍历它的所有特性，看是否k-开头指令，或者@事件
   compileElement(n) {
     const attrs = n.attributes;
+    // Array.from()方法将类数组转换为数组，即返回一个浅拷贝数组
     Array.from(attrs).forEach((attr) => {
       // k-text="xxx"
       // name = k-text,value = xxx
       const attrName = attr.name;
       const exp = attr.value;
-      // 指令
+      //判断是KVue 指令
       if (this.isDir(attrName)) {
-        // 执行特定指令处理函数
+        // 执行特定指令处理函数,拿出指令
         const dir = attrName.substring(2);
+        // 当前Kvue中指令存在，则执行该指令
         this[dir] && this[dir](n, exp);
       }
     });
@@ -162,6 +167,7 @@ class Compile {
 
   // k-text
   text(node, exp) {
+    // node.textContext = this.$vm[exp]
     this.update(node, exp, "text");
   }
 
@@ -183,7 +189,7 @@ class Compile {
   }
 }
 
-// 负责dom更新
+// top4:负责dom更新
 class Watcher {
   constructor(vm, key, updater) {
     this.vm = vm;
