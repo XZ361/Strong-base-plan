@@ -4,7 +4,7 @@ function defineReactive(obj, key, val) {
   // val如果是个对象，就需要递归处理
   observe(val);
 
-  // 创建Dep实例
+  // 创建Dep实例，与key一一对应
   const dep = new Dep()
   
   Object.defineProperty(obj, key, {
@@ -153,13 +153,13 @@ class Compile {
       }
     });
   }
-
+  //参数：节点，指令值表达式，以及处理指令
   update(node, exp, dir) {
-    // 1.init
+    // 1.init 初始化
     const fn = this[dir + 'Updater']
     fn && fn(node, this.$vm[exp])
 
-    // 2.update
+    // 2.update 建立更新函数
     new Watcher(this.$vm, exp, val => {
       fn && fn(node, val)
     })
@@ -177,6 +177,7 @@ class Compile {
 
   // k-html
   html(node, exp) {
+    // node.innerHTML = this.$vm[exp]
     this.update(node, exp, "html");
   }
 
@@ -191,33 +192,37 @@ class Compile {
 
 // top4:负责dom更新
 class Watcher {
+  // 1:参数：当前KVue实例，关联的key,关联的更新函数
   constructor(vm, key, updater) {
     this.vm = vm;
     this.key = key;
     this.updater = updater;
 
-    // 触发一下get
+    // 保存下当前的watcher实例
     Dep.target = this
+    // 触发一下get
     this.vm[this.key]
     Dep.target = null
   }
 
-  // 将来会被Dep调用
+  // 将来会被Dep类调用
   update() {
     this.updater.call(this.vm, this.vm[this.key]);
   }
 }
 
-// 保存watcher实例的依赖类
+// top5：保存watcher实例的依赖类
 class Dep {
   constructor() {
+    //1 可以保存相关watcher
     this.deps = []
   }
-  // 此处dep就是Watcher的实例
+  // 2此处dep就是Watcher的实例
   addDep(dep) {
     // 创建依赖关系时调用
     this.deps.push(dep)
   }
+  // 3执行更新
   notify() {
     this.deps.forEach(dep => dep.update())
   }
