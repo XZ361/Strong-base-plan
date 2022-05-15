@@ -78,16 +78,18 @@ class KVue {
     // 2.代理
     proxy(this);
 
-    // 3.编译
+    // 3.编译,(兩個參數，1宿主元素，當前kVue實例)
     new Compile(options.el, this);
   }
 }
 
+// top3:创建编译类
 class Compile {
   constructor(el, vm) {
     this.$vm = vm;
     this.$el = document.querySelector(el);
 
+    // 当前宿主存在，则执行编译
     if (this.$el) {
       this.compile(this.$el);
     }
