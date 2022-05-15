@@ -32,7 +32,7 @@ function observe(obj) {
   if (typeof obj !== "object" || obj == null) {
     return obj;
   }
-
+// 创建observer实例
   new Observer(obj);
 }
 
@@ -49,7 +49,7 @@ function proxy(vm) {
     });
   });
 }
-
+// top2:执行数据响应化
 class Observer {
   constructor(obj) {
     // 判断传入obj类型，做相应处理
@@ -65,9 +65,10 @@ class Observer {
   }
 }
 
+// top1：实现一个类KVue,这是Vue初始化的第一步
 class KVue {
   constructor(options) {
-    // 0.保存选项
+    // 0.保存选项,因为后续的操作可能会用到当前数据
     this.$options = options;
     this.$data = options.data;
 

@@ -1,7 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <div id="app">
+  <!-- 插值表达式 -->
   <p @click="add">{{counter}}</p>
   <p>{{counter}}</p>
+  <!-- vue指令 -->
   <p k-text="counter"></p>
   <p k-html="desc"></p>
   <input type="text" k-model="desc">
@@ -13,7 +15,7 @@
     el: '#app',
     data: {
       counter: 1,
-      desc: '<span style="color:red">村长真棒</span>'
+      desc: '<span style="color:red">二狗真棒</span>'
     },
     methods: {
       add() {
