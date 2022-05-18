@@ -151,6 +151,13 @@ class Compile {
         // 当前Kvue中指令存在，则执行该指令
         this[dir] && this[dir](n, exp);
       }
+      
+      // 事件处理
+      if(this.isEvent(attrName)){
+        // @click="onClick"
+        const dir=attrName.substring(1)
+        this.eventHandler(n,exp,dir)
+      }
     });
   }
   //参数：节点，指令值表达式，以及处理指令
@@ -187,6 +194,16 @@ class Compile {
   
   isDir(attrName) {
     return attrName.startsWith("k-");
+  }
+
+  isEvent(dir) {
+    return dir.indexOf('@')==0
+  }
+  eventHandler(node,exp,dir) {
+    //methods:{onClick:function(){}}
+    const fn = this.$vm.$options.methods && this.$vm.$options.methods[exp]
+    node.addEventListener(dir,fn.bind(this.$vm))
+
   }
 }
 
