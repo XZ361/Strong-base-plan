@@ -1,4 +1,23 @@
+// 实现数组的响应式
+//  对原有的数组方法实现一个更新通知
+const orginalProto = Array.prototype;
+// 备份一个新的数组原型/克隆一份,修改备份
+const arrayProto = Object.create(orginalProto);
+// 1：替换数组原型中呐7个方法
+['push','pop','shift','unshift'].forEach(method=>{
+  // 对备份原型上的数组方法进行覆盖
+  arrayProto[method] = function(){
+
+    // 覆盖之前进行原始的数组操作
+    orginalProto[method].apply(this,arguments)
+
+    // 通知更新
+    console.log("数组执行："+method+' 操作');
+  }
+ })
+
 // 给一个obj定义一个响应式的属性
+// 对象的响应式
 function defineReactive(obj, key, val) {
   // 递归
   // val如果是个对象，就需要递归处理
@@ -54,7 +73,16 @@ class Observer {
   constructor(obj) {
     // 判断传入obj类型，做相应处理
     if (Array.isArray(obj)) {
-      // todo
+      // todo，设置下obj的原型
+      // 覆盖实例原型，替换7个变更操作
+      obj.__proto__ = arrayProto
+     
+      // 对数组内部元素执行响应化处理
+      const keys = Object.keys(obj)
+      for (let i = 0; i < keys.length; i++) {
+         // 如果传入的obj数组中有其他的数组和对象，则需要进行递归处理
+        observe(obj[i])
+      }
     } else {
       this.walk(obj);
     }

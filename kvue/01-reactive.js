@@ -1,3 +1,21 @@
+// 实现数组的响应式
+//  对原有的数组方法实现一个更新通知
+const orginalProto = Array.prototype;
+// 备份一个新的数组原型/克隆一份,修改备份
+const arrayProto = Object.create(orginalProto);
+// 1：替换数组原型中呐7个方法
+['push','pop','shift','unshift'].forEach(method => {
+  // 对备份原型上的数组方法进行覆盖
+
+  arrayProto[method] = function(){
+    // 覆盖之前进行原始的数组操作
+    orginalProto[method].apply(this,arguments)
+
+    // 通知更新
+    console.log("数组执行："+method+' 操作');
+  }
+ })
+
 // js中监听数据变更需要Object.defineProperty()函数
 // 给一个obj定义一个响应式的属性
 // 先定义一个defineReactive函数
@@ -35,8 +53,22 @@ function observe(obj) {
   if (typeof obj !== "object" || obj == null) {
     return obj;
   }
-//  2要处理的一定是对象object
-  Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key]));
+  // 判断传入obj类型，做相应处理
+  if (Array.isArray(obj)) {
+    // todo，设置下obj的原型
+    // 覆盖实例原型，替换7个变更操作
+    obj.__proto__ = arrayProto
+   
+    // 对数组内部元素执行响应化处理
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+       // 如果传入的obj数组中有其他的数组和对象，则需要进行递归处理
+      observe(obj[i])
+    }
+  } else {
+    //  2要处理的一定是对象object
+    Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key]));
+  }
 }
 
 // 4
@@ -74,3 +106,8 @@ obj.baz.n
 // 由于新的属性没有进行响应式处理，所以需要一个set方法
 set(obj, 'dong', 'dong')
 obj.dong
+
+const arr = [1,2,3,40]
+
+arr.push(5)
+console.log(arr)
