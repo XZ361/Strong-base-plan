@@ -195,7 +195,7 @@ class Compile {
   isDir(attrName) {
     return attrName.startsWith("k-");
   }
-
+  // k-on  or @ 事件处理
   isEvent(dir) {
     return dir.indexOf('@')==0
   }
