@@ -203,8 +203,22 @@ class Compile {
     //methods:{onClick:function(){}}
     const fn = this.$vm.$options.methods && this.$vm.$options.methods[exp]
     node.addEventListener(dir,fn.bind(this.$vm))
-
   }
+  // k-model="xx"
+  model(node,exp){
+    // update方法是单向的，只完成赋值和更新
+    this.update(node,exp,'model')
+    // 事件监听
+    node.addEventListener('input',e=>{
+      // 新的值赋值给数据即可 
+      this.$vm[exp] = e.target.value       
+    })
+  }
+  modelUpdater(node,value){
+    // input框的value赋值
+    node.value = value
+  }
+
 }
 
 // top4:负责dom更新
